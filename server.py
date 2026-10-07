@@ -1,4 +1,5 @@
-from flask import request, url_for
+from flask import Flask
+from Flask import request, url_for
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion Detector")
