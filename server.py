@@ -12,19 +12,22 @@ def emotn_detector():
     response = emotion_detector(text_to_analyse)
     # Parse json response through API
     formatted_response = json.loads(response)
-    # Extract emotion dictionary from formatted response and store as emotion_dict
+    # Extract emotion dictionary from formatted response
     emotion_dict = formatted_response['emotionPredictions'][0]['emotion']
-    # Identifying dominant emotion from extracted emotion dictionary
+    # Extract dominant emotion from emotion dictionary
     dominant_emotion = max(emotion_dict, key=emotion_dict.get)
+    # Check if the dominant emotion is None, indicating an error or invalid text input
+    if dominant_emotion == None:
+      return "Invalid text! Please try again!"
+    else:
     # Merge extracted emotion dictionary and dominant emotion into a new dictionary
     emotion_analysis = {**emotion_dict, 'dominant_emotion': dominant_emotion}
-    # Return new dictionary containing emotion analysis results 
-    return "\n".join([f"{key} : {value}" for key, value in emotion_analysis.items()])
+    # Return formatted dictionary containing emotion analysis results 
+    return "\n".join([f"{key} : {value}" for key, value in emotion_analysis.items()
 
 @app.route("/")
-def render_index_page(): # Define route to html template
+def render_index_page():
     return render_template('index.html')
 
-""" Run application on localhost: 5000 """
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5000)
