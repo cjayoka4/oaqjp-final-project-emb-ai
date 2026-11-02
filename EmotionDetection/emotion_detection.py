@@ -27,5 +27,5 @@ def emotion_detector(text_to_analyse):
     # Merging extracted emotion dictionary and dominant emotion into a new dictionary
     emotion_analysis = {**emotion_dict, 'dominant_emotion': dominant_emotion}
 
-    # Returning formatted dictionary containing emotion analysis results
+    # Returning new dictionary containing emotion analysis results
     return "\n".join([f"{key} : {value}" for key, value in emotion_analysis.items()])
