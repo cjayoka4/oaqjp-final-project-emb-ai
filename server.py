@@ -4,29 +4,24 @@ from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
 app = Flask("Emotion Detector")
+
+"""Return the pathname of the emotion detector root directory."""
 @app.route("/emotionDetector")
-def emotn_detector():
+def emotion_detector():
+    """ 
+    This function accepts arguments in the form of texts to be analysed
+    """
     # Retrieve the text to analyse from the request arguments
     text_to_analyse = request.args.get('textToAnalyze')
     # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyse)
-    # Parse json response through API
-    formatted_response = json.loads(response)
-    # Extract emotion dictionary from formatted response
-    emotion_dict = formatted_response['emotionPredictions'][0]['emotion']
-    # Extract dominant emotion from emotion dictionary
-    dominant_emotion = max(emotion_dict, key=emotion_dict.get)
-    # Check if the dominant emotion is None, indicating an error or invalid text input
-    if dominant_emotion == None:
-      return "Invalid text! Please try again!"
-    else:
-    # Merge extracted emotion dictionary and dominant emotion into a new dictionary
-    emotion_analysis = {**emotion_dict, 'dominant_emotion': dominant_emotion}
-    # Return formatted dictionary containing emotion analysis results 
-    return "\n".join([f"{key} : {value}" for key, value in emotion_analysis.items()
+    # Retrieve response text
+    response_text = f"For the given statement, the system response is 'anger': {response['anger']}, 'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']}, 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
+    return response_text
 
 @app.route("/")
 def render_index_page():
+    """ This function runs the render template on the HTML template """
     return render_template('index.html')
 
 if __name__ == "__main__":
