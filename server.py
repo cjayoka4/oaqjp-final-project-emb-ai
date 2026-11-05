@@ -1,5 +1,4 @@
 """ Entry point for web server application """
-import json
 from flask import Flask, render_template, request
 from EmotionDetection.emotion_detection import emotion_detector
 
@@ -7,7 +6,7 @@ app = Flask("Emotion Detector")
 
 """Return the pathname of the emotion detector root directory."""
 @app.route("/emotionDetector")
-def emotion_detector():
+def emotion_detector_function():
     """ 
     This function accepts arguments in the form of texts to be analysed
     """
@@ -15,8 +14,16 @@ def emotion_detector():
     text_to_analyse = request.args.get('textToAnalyze')
     # Pass the text to the emotion_detector function and store the response
     response = emotion_detector(text_to_analyse)
-    # Retrieve response text
-    response_text = f"For the given statement, the system response is 'anger': {response['anger']}, 'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']}, 'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
+
+    if response['dominant_emotion'] is None:
+        response_text = "Invalid Input! Please try again."
+    else:
+        # Retrieve response text
+        response_text = (
+    f"For the given statement, the system response is 'anger': {response['anger']}, "
+    f"'disgust': {response['disgust']}, 'fear': {response['fear']}, 'joy': {response['joy']}, "
+    f"'sadness': {response['sadness']}. The dominant emotion is {response['dominant_emotion']}."
+)
     return response_text
 
 @app.route("/")
